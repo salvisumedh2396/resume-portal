@@ -1,7 +1,12 @@
 package com.salvisumedh2396.resumeapp.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -12,8 +17,13 @@ public class Job {
     private int id;
     private String company;
     private String designation;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    private Boolean currentJob;
+    @ElementCollection(targetClass = String.class)
+    private List<String> responsibilities = new ArrayList();
 
     public int getId() {
         return id;
@@ -55,6 +65,30 @@ public class Job {
         this.endDate = endDate;
     }
 
+    public Boolean getCurrentJob() {
+        return currentJob;
+    }
+
+    public void setCurrentJob(Boolean currentJob) {
+        this.currentJob = currentJob;
+    }
+
+    public List<String> getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(List<String> responsibilities) {
+        this.responsibilities = responsibilities;
+    }
+
+    public String getFormattedStartDate(){
+        return startDate.format(DateTimeFormatter.ofPattern("MMM yyyy"));
+    }
+
+    public String getFormattedEndDate(){
+        return endDate.format(DateTimeFormatter.ofPattern("MMM yyyy"));
+    }
+
     @Override
     public String toString() {
         return "Job{" +
@@ -63,6 +97,8 @@ public class Job {
                 ", designation='" + designation + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", isCurrentJob=" + currentJob +
+                ", responsibilities=" + responsibilities +
                 '}';
     }
 }

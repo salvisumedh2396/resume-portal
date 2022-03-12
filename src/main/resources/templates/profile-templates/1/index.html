@@ -22,7 +22,7 @@
 		</div>
 		
 		<div id="name">
-			<h1 class="quickFade delayTwo"><span th:text="${userProfile.firstName}">Joe</span><span th:text="${userProfile.lastName}">Bloggs</span> </h1>
+			<h1 class="quickFade delayTwo"><span th:text="${userProfile.firstName}">Sumedh</span><span th:text="${userProfile.lastName}">Websys</span> </h1>
 			<h2 class="quickFade delayThree"><span th:text="${userProfile.designation}">Job Title</span></h2>
 		</div>
 		
@@ -55,24 +55,16 @@
 				<h1>Work Experience</h1>
 			</div>
 			
-			<div class="sectionContent">
+			<div class="sectionContent" th:each="job: ${userProfile.jobs}">
 				<article>
-					<h2>Job Title at Company</h2>
-					<p class="subDetails">April 2011 - Present</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim. Vestibulum bibendum mattis dignissim. Proin id sapien quis libero interdum porttitor.</p>
+                    <h2><span th:text="${job.designation}">Job Title</span> at <span th:text="${job.company}">Company</span></h2>
+                    <p class="subDetails"><span th:text="${job.formattedStartDate}">April 2011</span> -
+                        <span th:text="${job.currentJob}? 'Present': ${job.formattedEndDate}">Present1</span></p>
+					<ul th:each="responsibility : ${job.responsibilities}">
+                        <li th:text="${responsibility}">Responsibility</li>
+                    </ul>
 				</article>
-				
-				<article>
-					<h2>Job Title at Company</h2>
-					<p class="subDetails">Janruary 2007 - March 2011</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim. Vestibulum bibendum mattis dignissim. Proin id sapien quis libero interdum porttitor.</p>
-				</article>
-				
-				<article>
-					<h2>Job Title at Company</h2>
-					<p class="subDetails">October 2004 - December 2006</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim. Vestibulum bibendum mattis dignissim. Proin id sapien quis libero interdum porttitor.</p>
-				</article>
+
 			</div>
 			<div class="clear"></div>
 		</section>
@@ -84,15 +76,8 @@
 			</div>
 			
 			<div class="sectionContent">
-				<ul class="keySkills">
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
-					<li>A Key Skill</li>
+				<ul class="keySkills" th:each="skill : ${userProfile.skills}">
+					<li th:text="${skill}">A Key Skill</li>
 				</ul>
 			</div>
 			<div class="clear"></div>
@@ -104,17 +89,11 @@
 				<h1>Education</h1>
 			</div>
 			
-			<div class="sectionContent">
+			<div class="sectionContent" th:each="edu: ${userProfile.education}">
 				<article>
-					<h2>College/University</h2>
-					<p class="subDetails">Qualification</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim.</p>
-				</article>
-				
-				<article>
-					<h2>College/University</h2>
-					<p class="subDetails">Qualification</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim.</p>
+					<h2 th:text="${edu.college}">College/University</h2>
+					<p class="subDetails" th:text="${edu.qualification}">Qualification</p>
+					<p th:text="${edu.summary}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies massa et erat luctus hendrerit. Curabitur non consequat enim.</p>
 				</article>
 			</div>
 			<div class="clear"></div>

@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -103,7 +101,7 @@ public class HomeController {
     }
 
     @GetMapping("/edit")
-    public String edit(Principal principal, Model model){
+    public String edit(Principal principal, Model model, @RequestParam(required = false)String add){
         String userId = principal.getName();
         model.addAttribute("userId", userId);
 
@@ -113,30 +111,78 @@ public class HomeController {
         model.addAttribute("userId",userId);
         UserProfile userProfile = userProfileOptional.get();
 
+        if("job".equals(add)){
+            userProfile.getJobs().add(new Job());
+        }else if("education".equals(add)){
+            userProfile.getEducation().add(new Education());
+        }else if("skill".equals(add)){
+            userProfile.getSkills().add("");
+        }
+
         //System.out.println(userProfile.toString());
 
         model.addAttribute("userprofile", userProfile);
         return "profile-edit";
     }
 
-    @PostMapping("/edit")
-    public String postEdit(Principal principal, Model model){
-        model.addAttribute("userId", principal.getName());
+    @GetMapping("/delete")
+    public String delete(Model model, Principal principal, @RequestParam String type, @RequestParam int index){
         String userId = principal.getName();
-        return "redirect:/view/"+userId;
-    }
 
-    @GetMapping("/view/{userId}")
-    public String view(@PathVariable("userId") String userId, Model model){
         Optional<UserProfile> userProfileOptional = userProfileRepository.findByUserName(userId);
         userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: "+ userId));
 
         model.addAttribute("userId",userId);
         UserProfile userProfile = userProfileOptional.get();
+
+        if("job".equals(type)){
+            userProfile.getJobs().remove(index);
+        }else if("education".equals(type)){
+            userProfile.getEducation().remove(index);
+        }else if("skill".equals(type)){
+            userProfile.getSkills().remove(index);
+        }
+
+        userProfileRepository.save(userProfile);
+        return "redirect:/edit/";
+    }
+
+    @PostMapping("/edit")
+    public String postEdit(Principal principal, Model model, @ModelAttribute UserProfile userProfile){
+        model.addAttribute("userId", principal.getName());
+        String userName = principal.getName();
+
+        Optional<UserProfile> userProfileOptional = userProfileRepository.findByUserName(userName);
+        userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: "+ userName));
+        UserProfile savedUserProfile = userProfileOptional.get();
+
+        userProfile.setId(savedUserProfile.getId());
+        userProfile.setUserName(userName);
+        System.out.println(userProfile.toString());
+        userProfileRepository.save(userProfile);
+
+        return "redirect:/view/"+userName;
+    }
+
+    @GetMapping("/view/{userName}")
+    public String view(Principal principal, @PathVariable("userName") String userName, Model model){
+        if(principal != null && principal.getName() != ""){
+            boolean currentUserProfile = principal.getName().equals(userName);
+            model.addAttribute("currentUserProfile",currentUserProfile);
+        }
+
+        Optional<UserProfile> userProfileOptional = userProfileRepository.findByUserName(userName);
+        userProfileOptional.orElseThrow(() -> new RuntimeException("Not found: "+ userName));
+
+        model.addAttribute("userId",userName);
+        UserProfile userProfile = userProfileOptional.get();
         System.out.println(userProfile.toString());
         model.addAttribute("userProfile", userProfile);
-
+        int theme = userProfile.getTheme();
+        if(theme==0){
+            theme = 1;
+        }
         //System.out.println(userProfile.getJobs());
-        return "profile-templates/"+userProfile.getTheme()+"/index";
+        return "profile-templates/"+theme+"/index";
     }
 }

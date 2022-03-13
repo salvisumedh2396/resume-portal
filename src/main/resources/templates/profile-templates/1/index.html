@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Joe Bloggs - Curriculum Vitae</title>
+<title>The Blogs</title>
 
 <meta name="viewport" content="width=device-width"/>
 <meta name="description" content="The Curriculum Vitae of Joe Bloggs."/>
@@ -22,7 +22,11 @@
 		</div>
 		
 		<div id="name">
-			<h1 class="quickFade delayTwo"><span th:text="${userProfile.firstName}">Sumedh</span><span th:text="${userProfile.lastName}">Websys</span> </h1>
+			<h1 class="quickFade delayTwo">
+				<span th:text="${userProfile.firstName}">Sumedh</span>
+				<span th:text="${userProfile.lastName}">Websys</span>
+				<a th:if="${currentUserProfile}" href="/edit">Edit</a>
+			</h1>
 			<h2 class="quickFade delayThree"><span th:text="${userProfile.designation}">Job Title</span></h2>
 		</div>
 		
@@ -59,7 +63,7 @@
 				<article>
                     <h2><span th:text="${job.designation}">Job Title</span> at <span th:text="${job.company}">Company</span></h2>
                     <p class="subDetails"><span th:text="${job.formattedStartDate}">April 2011</span> -
-                        <span th:text="${job.currentJob}? 'Present': ${job.formattedEndDate}">Present1</span></p>
+                        <span th:text="${job.currentJob}? 'Present': ${job.formattedEndDate}">Present</span></p>
 					<ul th:each="responsibility : ${job.responsibilities}">
                         <li th:text="${responsibility}">Responsibility</li>
                     </ul>

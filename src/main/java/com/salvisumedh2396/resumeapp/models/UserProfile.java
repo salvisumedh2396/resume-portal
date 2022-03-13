@@ -53,7 +53,8 @@ public class UserProfile {
         return theme;
     }
 
-    public void setTheme(int theme) {
+    public void setTheme(int theme)
+    {
         this.theme = theme;
     }
 

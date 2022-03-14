@@ -97,7 +97,7 @@ public class HomeController {
         //userProfile1.setJobs(jobs);
         userProfileRepository.save(userProfile1);
 
-        return "profile";
+        return "index";
     }
 
     @GetMapping("/edit")

@@ -2,19 +2,14 @@ package com.salvisumedh2396.resumeapp;
 
 import com.salvisumedh2396.resumeapp.models.Education;
 import com.salvisumedh2396.resumeapp.models.Job;
-import com.salvisumedh2396.resumeapp.models.User;
 import com.salvisumedh2396.resumeapp.models.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,16 +20,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(){
-        /*UserProfile userProfile1 = new UserProfile();
-        userProfile1.setId(1);
-        userProfile1.setUserName("sumedh");
-        userProfile1.setDesignation("Student");
-        userProfile1.setFirstName("Sumedh");
-        userProfile1.setLastName("Salvi");
-        userProfile1.setEmail("ssalvi@ncsu.edu");
-        userProfile1.setPhone("984-202-9201");
-        userProfile1.setSummary("Just some Lorem Ipsum");
-        userProfile1.setTheme(1);*/
 
         Optional<UserProfile> profileOptional = userProfileRepository.findByUserName("sumedh");
         profileOptional.orElseThrow(() -> new RuntimeException("Not found"));
